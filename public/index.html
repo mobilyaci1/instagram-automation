@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESQUNE - Instagram Automation</title>
+    <title>CraftSync - AI Instagram Automation</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
             min-height: 100vh;
             padding: 20px;
             color: #333;
@@ -22,24 +22,34 @@
         .container {
             max-width: 900px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 25px;
             padding: 40px;
-            box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+            box-shadow: 0 30px 100px rgba(0,0,0,0.5);
             backdrop-filter: blur(10px);
         }
         
         .logo {
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
         
         .logo h1 {
-            font-size: 36px;
+            font-size: 42px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-weight: 800;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+        
+        .tagline {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
         }
         
         .subtitle {
@@ -49,49 +59,103 @@
             font-size: 16px;
         }
         
-        .stats-bar {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 15px;
-            color: white;
-        }
-        
-        .stat-item {
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 20px;
+            padding: 60px 20px;
             text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+            transition: all 0.3s;
+            cursor: pointer;
         }
         
-        .stat-number {
-            font-size: 28px;
-            font-weight: 700;
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            transform: scale(1.02);
         }
         
-        .stat-label {
+        .upload-area.dragover {
+            border-color: #764ba2;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+        }
+        
+        .upload-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        
+        .upload-text {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+        
+        .upload-subtext {
+            font-size: 14px;
+            color: #888;
+        }
+        
+        #fileInput {
+            display: none;
+        }
+        
+        .file-list {
+            margin-top: 20px;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .file-icon {
+            font-size: 30px;
+            margin-right: 15px;
+        }
+        
+        .file-info {
+            flex: 1;
+        }
+        
+        .file-name {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .file-size {
             font-size: 12px;
-            opacity: 0.9;
+            color: #888;
         }
         
         .tabs {
             display: flex;
             margin-bottom: 25px;
             background: #f8f9fa;
-            border-radius: 12px;
+            border-radius: 15px;
             padding: 5px;
             overflow-x: auto;
         }
         
         .tab {
             flex: 1;
-            padding: 12px 20px;
+            padding: 14px 24px;
             text-align: center;
             cursor: pointer;
-            border-radius: 10px;
+            border-radius: 12px;
             transition: all 0.3s;
             font-weight: 600;
             font-size: 14px;
             white-space: nowrap;
+            border: none;
+            background: transparent;
+            color: #555;
         }
         
         .tab:hover {
@@ -101,7 +165,7 @@
         .tab.active {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
         }
         
         .tab-content {
@@ -114,7 +178,7 @@
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
@@ -124,17 +188,17 @@
         
         label {
             display: block;
-            margin-bottom: 8px;
-            color: #555;
+            margin-bottom: 10px;
+            color: #444;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 15px;
         }
         
         input, select, textarea {
             width: 100%;
-            padding: 14px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
+            padding: 16px;
+            border: 2px solid #e8e8e8;
+            border-radius: 14px;
             font-size: 15px;
             transition: all 0.3s;
             background: #fafafa;
@@ -144,44 +208,50 @@
             outline: none;
             border-color: #667eea;
             background: white;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
         }
         
         button {
             width: 100%;
-            padding: 16px;
+            padding: 18px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 12px;
-            font-size: 16px;
+            border-radius: 14px;
+            font-size: 17px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
             text-transform: uppercase;
             letter-spacing: 1px;
+            margin-bottom: 10px;
         }
         
         button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
         }
         
         .btn-secondary {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            margin-top: 10px;
         }
         
         .btn-success {
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
         }
         
+        .btn-auto {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            font-size: 20px;
+            padding: 25px;
+        }
+        
         .result {
             margin-top: 20px;
-            padding: 18px;
+            padding: 20px;
             background: #f8f9fa;
-            border-radius: 12px;
-            border-left: 4px solid #667eea;
+            border-radius: 14px;
+            border-left: 5px solid #667eea;
             animation: slideIn 0.3s;
         }
         
@@ -196,17 +266,46 @@
         
         .post-item {
             background: white;
-            padding: 20px;
+            padding: 25px;
             margin-bottom: 15px;
-            border-radius: 15px;
+            border-radius: 18px;
             border-left: 5px solid #667eea;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             transition: all 0.3s;
         }
         
         .post-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            transform: translateX(8px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+        }
+        
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 18px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 13px;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         
         .card-grid {
@@ -218,39 +317,63 @@
         
         .card {
             background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             text-align: center;
             transition: all 0.3s;
+            border: 2px solid transparent;
         }
         
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            border-color: #667eea;
         }
         
         .card-icon {
-            font-size: 40px;
-            margin-bottom: 15px;
+            font-size: 50px;
+            margin-bottom: 20px;
         }
         
         .card-title {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             color: #333;
         }
         
         .card-desc {
             font-size: 14px;
             color: #666;
+            line-height: 1.6;
         }
+        
+        .feature-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin: 5px;
+        }
+        
+        .auto-settings {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+            padding: 25px;
+            border-radius: 18px;
+            margin-bottom: 20px;
+            border: 2px solid #e8e8e8;
+        }
+        
+        .hidden { display: none; }
         
         .loading {
             display: inline-block;
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             border: 3px solid rgba(255,255,255,.3);
             border-radius: 50%;
             border-top-color: white;
@@ -261,95 +384,100 @@
             to { transform: rotate(360deg); }
         }
         
-        .hidden { display: none; }
+        .success-animation {
+            animation: successPop 0.5s;
+        }
+        
+        @keyframes successPop {
+            0% { transform: scale(0.8); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="logo">
-            <h1>🪑 ESQUNE</h1>
+            <h1>⚡ CraftSync</h1>
         </div>
-        <p class="subtitle">AI Destekli Instagram Otomasyon Sistemi</p>
+        <div class="tagline">Mobilya Sanatçıları için AI</div>
+        <p class="subtitle">Dosyanı yükle, gerisini AI halletsin</p>
         
-        <div class="stats-bar">
-            <div class="stat-item">
-                <div class="stat-number" id="totalPosts">0</div>
-                <div class="stat-label">Toplam Gönderi</div>
+        <!-- Dosya Yükleme Alanı -->
+        <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-icon">📁</div>
+            <div class="upload-text">Videonu veya Fotoğrafını Sürükle Bırak</div>
+            <div class="upload-subtext">veya tıkla seç (MP4, JPG, PNG)</div>
+            <input type="file" id="fileInput" accept="video/*,image/*" multiple onchange="handleFiles(this.files)">
+        </div>
+        
+        <div id="fileList" class="file-list"></div>
+        
+        <!-- Otomatik Mod -->
+        <div class="auto-settings" id="autoSettings">
+            <h3 style="margin-bottom: 15px; color: #333;">🤖 AI Otomatik Ayarlar</h3>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
+                <span class="feature-badge">✅ En iyi zaman</span>
+                <span class="feature-badge">✅ Caption üret</span>
+                <span class="feature-badge">✅ Hashtag seç</span>
+                <span class="feature-badge">✅ Mobilya odaklı</span>
             </div>
-            <div class="stat-item">
+            <p style="color: #666; font-size: 14px; margin-bottom: 15px;">
+                AI, mobilya sektörü için en iyi paylaşım zamanını, etkileyici caption'ı ve trend hashtag'leri otomatik seçecek.
+            </p>
+            <button class="btn-auto" onclick="autoSchedule()">
+                🚀 TEK TIKLA PLANLA<br>
+                <small style="font-size: 14px; opacity: 0.9;">AI her şeyi halleder</small>
+            </button>
+        </div>
+        
+        <!-- İstatistikler -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-number" id="totalPosts">0</div>
+                <div class="stat-label">Toplam</div>
+            </div>
+            <div class="stat-card">
                 <div class="stat-number" id="pendingPosts">0</div>
                 <div class="stat-label">Bekleyen</div>
             </div>
-            <div class="stat-item">
+            <div class="stat-card">
                 <div class="stat-number" id="publishedPosts">0</div>
                 <div class="stat-label">Yayınlanan</div>
             </div>
         </div>
         
+        <!-- Tabs -->
         <div class="tabs">
-            <div class="tab active" onclick="showTab('login')">🔑 Giriş</div>
-            <div class="tab" onclick="showTab('register')">📝 Kayıt</div>
-            <div class="tab" onclick="showTab('dashboard')">📊 Dashboard</div>
-            <div class="tab" onclick="showTab('schedule')">📅 Planla</div>
-            <div class="tab" onclick="showTab('posts')">📱 Gönderiler</div>
-            <div class="tab" onclick="showTab('ads')">🎯 Reklamlar</div>
+            <button class="tab active" onclick="showTab('upload')">📤 Yükle</button>
+            <button class="tab" onclick="showTab('manual')">⚙️ Manuel</button>
+            <button class="tab" onclick="showTab('posts')">📱 Gönderiler</button>
+            <button class="tab" onclick="showTab('analytics')">📊 Analiz</button>
         </div>
         
-        <!-- Login -->
-        <div id="login" class="tab-content active">
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" id="loginEmail" placeholder="ornek@email.com">
-            </div>
-            <div class="form-group">
-                <label>Şifre</label>
-                <input type="password" id="loginPassword" placeholder="******">
-            </div>
-            <button onclick="login()">Giriş Yap</button>
-            <div id="loginResult"></div>
-        </div>
-        
-        <!-- Register -->
-        <div id="register" class="tab-content">
-            <div class="form-group">
-                <label>Ad Soyad</label>
-                <input type="text" id="regName" placeholder="Adınız Soyadınız">
-            </div>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" id="regEmail" placeholder="ornek@email.com">
-            </div>
-            <div class="form-group">
-                <label>Şifre</label>
-                <input type="password" id="regPassword" placeholder="******">
-            </div>
-            <button onclick="register()">Kayıt Ol</button>
-            <div id="registerResult"></div>
-        </div>
-        
-        <!-- Dashboard -->
-        <div id="dashboard" class="tab-content">
+        <!-- Upload Tab -->
+        <div id="upload" class="tab-content active">
             <div class="card-grid">
                 <div class="card">
-                    <div class="card-icon">🤖</div>
-                    <div class="card-title">AI Caption</div>
-                    <div class="card-desc">Yapay zeka ile otomatik açıklama üret</div>
+                    <div class="card-icon">🎬</div>
+                    <div class="card-title">Reels</div>
+                    <div class="card-desc">Kısa video içerikleri için otomatik optimizasyon</div>
                 </div>
                 <div class="card">
-                    <div class="card-icon">⏰</div>
-                    <div class="card-title">Zamanlama</div>
-                    <div class="card-desc">Gönderilerini önceden planla</div>
+                    <div class="card-icon">📸</div>
+                    <div class="card-title">Gönderi</div>
+                    <div class="card-desc">Fotoğraf paylaşımları için AI destekli caption</div>
                 </div>
                 <div class="card">
-                    <div class="card-icon">📈</div>
-                    <div class="card-title">Analiz</div>
-                    <div class="card-desc">Performans istatistiklerini gör</div>
+                    <div class="card-icon">📲</div>
+                    <div class="card-title">Story</div>
+                    <div class="card-desc">Hikaye formatında hızlı paylaşım</div>
                 </div>
             </div>
         </div>
         
-        <!-- Schedule -->
-        <div id="schedule" class="tab-content">
+        <!-- Manuel Tab -->
+        <div id="manual" class="tab-content">
             <div class="form-group">
                 <label>Medya Tipi</label>
                 <select id="mediaType">
@@ -359,54 +487,54 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>Medya URL</label>
+                <label>Medya URL (veya yukarıdan dosya seç)</label>
                 <input type="url" id="mediaUrl" placeholder="https://ornek.com/video.mp4">
             </div>
             <div class="form-group">
                 <label>Caption</label>
-                <textarea id="caption" rows="3" placeholder="Açıklama yazın veya AI'a bırakın..."></textarea>
+                <textarea id="caption" rows="3" placeholder="AI otomatik yazacak..."></textarea>
             </div>
             <div class="form-group">
-                <label>Zaman</label>
+                <label>Zaman (Boş bırakırsan AI en iyi saati seçer)</label>
                 <input type="datetime-local" id="scheduledAt">
             </div>
             <div class="form-group">
                 <label>
-                    <input type="checkbox" id="useAI" checked> AI ile caption üret
+                    <input type="checkbox" id="useAI" checked> 🤖 AI ile her şeyi otomatik yap
                 </label>
             </div>
-            <button onclick="schedulePost()">📅 Gönderi Planla</button>
-            <button class="btn-secondary" onclick="generateAI()">🤖 AI Caption Üret</button>
+            <button onclick="schedulePost()">📅 Planla</button>
+            <button class="btn-secondary" onclick="generateAI()">✨ AI Caption Üret</button>
             <div id="scheduleResult"></div>
         </div>
         
-        <!-- Posts -->
+        <!-- Posts Tab -->
         <div id="posts" class="tab-content">
-            <button onclick="getPosts()">🔄 Gönderileri Yenile</button>
+            <button onclick="getPosts()">🔄 Yenile</button>
             <div id="postsList" class="posts-list"></div>
         </div>
         
-        <!-- Ads -->
-        <div id="ads" class="tab-content">
+        <!-- Analytics Tab -->
+        <div id="analytics" class="tab-content">
             <div class="card-grid">
                 <div class="card">
-                    <div class="card-icon">🎯</div>
-                    <div class="card-title">Reklam Oluştur</div>
-                    <div class="card-desc">Yeni Instagram reklam kampanyası başlat</div>
-                </div>
-                <div class="card">
-                    <div class="card-icon">💰</div>
-                    <div class="card-title">Bütçe Ayarla</div>
-                    <div class="card-desc">Günlük ve toplam bütçe limiti</div>
+                    <div class="card-icon">📈</div>
+                    <div class="card-title">Etkileşim</div>
+                    <div class="card-desc">Beğeni, yorum ve kaydetme analizi</div>
                 </div>
                 <div class="card">
                     <div class="card-icon">👥</div>
-                    <div class="card-title">Hedef Kitle</div>
-                    <div class="card-desc">Demografik hedefleme yap</div>
+                    <div class="card-title">Takipçi</div>
+                    <div class="card-desc">Takipçi büyüme istatistikleri</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🎯</div>
+                    <div class="card-title">Performans</div>
+                    <div class="card-desc">En iyi gönderiler ve saatler</div>
                 </div>
             </div>
-            <div style="margin-top: 30px; text-align: center; color: #666;">
-                <p>🚧 Reklam yönetimi yakında aktif olacak...</p>
+            <div style="margin-top: 30px; text-align: center; color: #888; padding: 40px;">
+                <p>📊 Detaylı analizler yakında aktif olacak...</p>
             </div>
         </div>
     </div>
@@ -414,166 +542,35 @@
     <script>
         const API_URL = 'https://instagram-automation-production-a99a.up.railway.app';
         let token = localStorage.getItem('token') || '';
+        let uploadedFiles = [];
 
-        function showTab(tabName) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            
-            event.target.classList.add('active');
-            document.getElementById(tabName).classList.add('active');
-            
-            if (tabName === 'posts') getPosts();
-            if (tabName === 'dashboard') updateStats();
-        }
-
-        async function updateStats() {
-            try {
-                const res = await fetch(`${API_URL}/api/scheduler/posts`, {
-                    headers: { 'Authorization': 'Bearer ' + token }
-                });
-                const data = await res.json();
-                
-                if (data.posts) {
-                    document.getElementById('totalPosts').textContent = data.posts.length;
-                    document.getElementById('pendingPosts').textContent = data.posts.filter(p => p.status === 'pending').length;
-                    document.getElementById('publishedPosts').textContent = data.posts.filter(p => p.status === 'published').length;
-                }
-            } catch (err) {
-                console.log('Stats error');
-            }
-        }
-
-        async function register() {
-            const name = document.getElementById('regName').value;
-            const email = document.getElementById('regEmail').value;
-            const password = document.getElementById('regPassword').value;
-            
-            try {
-                const res = await fetch(`${API_URL}/api/auth/register`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password, fullName: name })
-                });
-                const data = await res.json();
-                
-                if (data.token) {
-                    token = data.token;
-                    localStorage.setItem('token', token);
-                    document.getElementById('registerResult').innerHTML = '<div class="result">✅ Kayıt başarılı! Giriş yapabilirsiniz.</div>';
-                } else {
-                    document.getElementById('registerResult').innerHTML = '<div class="result">❌ ' + (data.error || 'Hata') + '</div>';
-                }
-            } catch (err) {
-                document.getElementById('registerResult').innerHTML = '<div class="result">❌ Bağlantı hatası</div>';
-            }
-        }
-
-        async function login() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            try {
-                const res = await fetch(`${API_URL}/api/auth/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-                const data = await res.json();
-                
-                if (data.token) {
-                    token = data.token;
-                    localStorage.setItem('token', token);
-                    document.getElementById('loginResult').innerHTML = '<div class="result">✅ Giriş başarılı! Dashboard\'a geçebilirsiniz.</div>';
-                } else {
-                    document.getElementById('loginResult').innerHTML = '<div class="result">❌ ' + (data.error || 'Hata') + '</div>';
-                }
-            } catch (err) {
-                document.getElementById('loginResult').innerHTML = '<div class="result">❌ Bağlantı hatası</div>';
-            }
-        }
-
-        async function generateAI() {
-            const mediaType = document.getElementById('mediaType').value;
-            
-            try {
-                const res = await fetch(`${API_URL}/api/ai/generate`, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + token
-                    },
-                    body: JSON.stringify({ mediaType })
-                });
-                const data = await res.json();
-                
-                if (data.caption) {
-                    document.getElementById('caption').value = data.caption;
-                    document.getElementById('scheduleResult').innerHTML = '<div class="result">✅ AI caption hazır!</div>';
-                }
-            } catch (err) {
-                document.getElementById('scheduleResult').innerHTML = '<div class="result">❌ Hata</div>';
-            }
-        }
-
-        async function schedulePost() {
-            const mediaType = document.getElementById('mediaType').value;
-            const mediaUrl = document.getElementById('mediaUrl').value;
-            const caption = document.getElementById('caption').value;
-            const scheduledAt = document.getElementById('scheduledAt').value;
-            const useAI = document.getElementById('useAI').checked;
-            
-            try {
-                const res = await fetch(`${API_URL}/api/scheduler/schedule`, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + token
-                    },
-                    body: JSON.stringify({ mediaType, mediaUrl, caption, scheduledAt, useAI })
-                });
-                const data = await res.json();
-                
-                if (data.success) {
-                    document.getElementById('scheduleResult').innerHTML = '<div class="result">✅ Gönderi planlandı! ID: ' + data.post.id + '</div>';
-                    updateStats();
-                } else {
-                    document.getElementById('scheduleResult').innerHTML = '<div class="result">❌ ' + (data.error || 'Hata') + '</div>';
-                }
-            } catch (err) {
-                document.getElementById('scheduleResult').innerHTML = '<div class="result">❌ Bağlantı hatası</div>';
-            }
-        }
-
-        async function getPosts() {
-            try {
-                const res = await fetch(`${API_URL}/api/scheduler/posts`, {
-                    headers: { 'Authorization': 'Bearer ' + token }
-                });
-                const data = await res.json();
-                
-                let html = '';
-                if (data.posts && data.posts.length > 0) {
-                    data.posts.forEach(post => {
-                        const statusEmoji = post.status === 'published' ? '✅' : '⏳';
-                        html += `<div class="post-item">
-                            <strong>${statusEmoji} ID:</strong> ${post.id}<br>
-                            <strong>Tip:</strong> ${post.media_type}<br>
-                            <strong>Durum:</strong> ${post.status}<br>
-                            <strong>Zaman:</strong> ${new Date(post.scheduled_at).toLocaleString('tr-TR')}
-                        </div>`;
-                    });
-                } else {
-                    html = '<div class="result">Henüz gönderi yok</div>';
-                }
-                
-                document.getElementById('postsList').innerHTML = html;
-            } catch (err) {
-                document.getElementById('postsList').innerHTML = '<div class="result">❌ Hata</div>';
-            }
-        }
+        // Drag & Drop
+        const uploadArea = document.getElementById('uploadArea');
         
-        // Sayfa yüklendiğinde stats güncelle
-        updateStats();
-    </script>
-</body>
-</html>
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        function handleFiles(files) {
+            uploadedFiles = Array.from(files);
+            let html = '';
+            
+            uploadedFiles.forEach(file => {
+                const size = (file.size / 1024 / 1024).toFixed(2);
+                const icon = file.type.startsWith('video') ? '🎬' : '📸';
+                
+                html += `<div class="file-item">
+                    <div class="file-icon">${icon}</div>
+                    <div class="file-info">
+                        <div class
