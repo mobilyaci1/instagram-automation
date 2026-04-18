@@ -8,6 +8,9 @@ const path = require('path');
 const app = express();
 app.use(express.json());
 
+// STATIC DOSYALARI SERVIS ET (HTML, CSS, JS)
+app.use(express.static(path.join(__dirname, 'public')));
+
 // SQLite veritabanı (dosya bazlı, kurulum yok)
 const dbPath = path.join(__dirname, 'database.sqlite');
 const db = new sqlite3.Database(dbPath);
